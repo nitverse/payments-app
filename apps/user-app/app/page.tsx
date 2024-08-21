@@ -1,11 +1,8 @@
+"use client";
 
-const page = () => {
-  return (
-    <div className="flex text-5xl font-semibold overflow-hidden p-2">
-      page
-      <div className="px-3">page</div>
-    </div>
-  );
-};
+import { useBalance } from "@repo/store/src/hooks/useBalance";
 
-export default page;
+export default function Home() {
+  const balance = useBalance();
+  return <div>hi there {balance}</div>;
+}
