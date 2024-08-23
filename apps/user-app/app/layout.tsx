@@ -1,8 +1,7 @@
-
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { RecoilProvider } from "../../merchant-app/providers/recoilProvider";
+import { RecoilProvider } from "../providers/recoilProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <RecoilProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          {children}
-        </body>
-      </RecoilProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <RecoilProvider>{children}</RecoilProvider>
+      </body>
     </html>
   );
 }
