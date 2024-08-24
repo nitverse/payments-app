@@ -10,7 +10,7 @@
       "@repo/db": ["../../packages/db"],
       "@repo/db/*": ["../../packages/db/*"],
       "@repo/store" : ["../../packages/store/"],
-      "@repo/store/*" : ["../../packages/store/*"]
+      "@repo/store/*" : ["../../packages/store/*"],
     }
   },
   "include": [

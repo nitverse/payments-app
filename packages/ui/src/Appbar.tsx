@@ -1,4 +1,5 @@
 import { Button } from "./button";
+import { User } from "lucide-react"; // Assuming you're using lucide-react for icons
 
 interface AppbarProps {
   user?: {
@@ -21,17 +22,40 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   };
 
   return (
-    <div className="flex justify-between border-b px-4 my-4">
-      <div className="text-lg flex flex-col justify-center">PayTM</div>
-      <div className="flex flex-col justify-center pt-2">
-        <button
-          onClick={handleAuthAction}
-          className="bg-black rounded-md mb-3 text-white px-4 py-2"
-        >
-          {user ? "Logout" : "Login"}
-        </button>
+    <div className="w-full bg-white shadow-md">
+      <div className=" px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4">
+          <div className="flex items-center">
+            <span className="font-bold text-xl text-gray-800">Dashboard</span>
+          </div>
+          <div className="flex items-center">
+            {user ? (
+              <div className="flex items-center mr-4">
+                <span className="text-gray-700 mr-4">
+                  Welcome, {user.name}
+                </span>
+                <Button
+                  onClick={handleAuthAction}
+                  variant="outline"
+                  className="flex items-center"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={handleAuthAction}
+                variant="primary"
+                className="flex items-center"
+              >
+                <User className="mr-2 h-4 w-4" />
+                Login
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
