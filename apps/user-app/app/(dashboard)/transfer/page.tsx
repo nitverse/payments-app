@@ -42,11 +42,11 @@ const Page = async () => {
   const transactions = await getOnRampTransactions();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-6 sm:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-2 sm:p-5">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl sm:text-6xl font-extrabold text-indigo-900 mb-10 text-center">
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-indigo-900 mb-5 text-center">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-            Transfer Money
+            Add Money
           </span>
         </h1>
 

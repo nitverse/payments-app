@@ -11,7 +11,7 @@ async function main() {
       name: "nitant",
       Balance: {
         create: {
-          amount: 20000,
+          amount: 0,
           locked: 0,
         },
       },
@@ -19,7 +19,7 @@ async function main() {
         create: {
           startTime: new Date(),
           status: "Success",
-          amount: 20000,
+          amount: 0,
           token: "tok3n__1",
           provider: "HDFC Bank",
         },
@@ -33,10 +33,10 @@ async function main() {
     create: {
       number: "2222222222",
       password: await bcrypt.hash("john", 10),
-      name: "nitant",
+      name: "john",
       Balance: {
         create: {
-          amount: 20000,
+          amount: 0,
           locked: 0,
         },
       },
@@ -44,7 +44,7 @@ async function main() {
         create: {
           startTime: new Date(),
           status: "Success",
-          amount: 20000,
+          amount: 0,
           token: "tok3n__2",
           provider: "HDFC Bank",
         },

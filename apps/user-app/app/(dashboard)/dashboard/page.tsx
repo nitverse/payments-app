@@ -23,7 +23,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="w-screen">
+    <div className="">
       <Appbar
         user={session?.user}
         onSignin={handleSignIn}

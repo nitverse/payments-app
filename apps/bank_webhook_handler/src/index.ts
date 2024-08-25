@@ -14,20 +14,10 @@ app.post("/hdfcwebhook", async (req, res) => {
     userId: req.body.user_identifier,
     amount: req.body.amount,
   };
-  
+
   try {
-    console.log(req.body)
+    console.log(req.body);
     await db.$transaction([
-      db.balance.updateMany({
-        where: {
-          userId: paymentInformation.userId,
-        },
-        data: {
-          amount: {
-            increment: Number(paymentInformation.amount),
-          },
-        },
-      }),
       db.onRampTransaction.updateMany({
         where: {
           token: paymentInformation.token,
@@ -38,7 +28,21 @@ app.post("/hdfcwebhook", async (req, res) => {
       }),
     ]);
 
-    console.log()
+    db.balance.updateMany({
+      where: {
+        userId: paymentInformation.userId,
+      },
+      data: {
+        amount: {
+          increment: Number(paymentInformation.amount) * 100,
+        },
+      },
+    });
+
+    console.log(
+      `Balance updated for user ${paymentInformation.userId} with amount ${paymentInformation.amount}`
+    );
+
     res.status(200).json({
       message: "Captured",
     });
@@ -49,6 +53,5 @@ app.post("/hdfcwebhook", async (req, res) => {
     });
   }
 });
-
 
 app.listen(3003);

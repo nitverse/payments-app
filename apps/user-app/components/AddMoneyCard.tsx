@@ -9,11 +9,11 @@ import createOnRampTransaction from "../lib/actions/createOnRampTransaction";
 const SUPPORTED_BANKS: { name: string; redirectUrl: string }[] = [
   {
     name: "HDFC Bank",
-    redirectUrl: "https://netbanking.hdfcbank.com",
+    redirectUrl: "http://localhost:3003/hdfcwebhook/",
   },
   {
     name: "Axis Bank",
-    redirectUrl: "https://www.axisbank.com/",
+    redirectUrl: "http://localhost:3003/hdfcwebhook/",
   },
 ];
 
@@ -32,7 +32,8 @@ const AddMoneyCard = ({ name }: AddMoneyCardProps) => {
     if (redirectUrl) {
       console.log(value);
       await createOnRampTransaction(provider,value);
-      router.push(redirectUrl);
+      // router.push(redirectUrl);
+      router.refresh();
     } else {
       console.error("Redirect URL is undefined");
     }
@@ -50,8 +51,6 @@ const AddMoneyCard = ({ name }: AddMoneyCardProps) => {
         placeholder="Enter amount"
         onChange={handleAmountChange}
         type="number"
-        step="0.01"
-        min="0"
       />
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">

@@ -4,9 +4,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import { db } from "@repo/db";
 import crypto from "crypto";
+import axios from "axios";
 
 export default async function createOnRampTransaction(
-  provider: string,
+  provider: string, 
   amount: number
 ) {
   try {
@@ -32,7 +33,7 @@ export default async function createOnRampTransaction(
         status: "Processing",
         startTime: new Date(),
         token: token,
-        amount: Math.round(amount * 100),
+        amount: amount,
         user: {
           connect: {
             id: session.user.id,
@@ -41,14 +42,33 @@ export default async function createOnRampTransaction(
       },
     });
 
+    const webhookUrl = "http://localhost:3003/hdfcwebhook";
+    const webhookResponse = await axios.post(
+      webhookUrl,
+      {
+        token: token,
+        user_identifier: session.user.id,
+        amount: amount.toString(),
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     return {
       success: true,
-      message: "Transaction added",
+      message: "Transaction added and webhook notified",
       transactionId: transaction.id,
       token: token,
+      webhookResult: webhookResponse.data,
     };
   } catch (error) {
-    console.error("Error creating on-ramp transaction:", error);
+    console.error("Error processing transaction:", error);
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response?.data);
+    }
     return {
       success: false,
       message: "An error occurred while processing the transaction",

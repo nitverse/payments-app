@@ -67,7 +67,7 @@ export const OnRampTransactions = ({
               </div>
               <div className="text-right">
                 <div className="text-sm px-4 font-semibold text-green-600">
-                  + ₹{(t.amount / 100).toFixed(2)}
+                  + ₹{t.amount}
                 </div>
               </div>
             </div>
