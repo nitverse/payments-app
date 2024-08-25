@@ -29,7 +29,7 @@ export default function DashboardPage() {
         onSignin={handleSignIn}
         onSignout={handleSignOut}
       />
-      <main className="p-4">
+      <div className="p-4">
         {session ? (
           <div>
             <h1>Welcome to your Dashboard, {session.user?.name}</h1>
@@ -40,7 +40,7 @@ export default function DashboardPage() {
             <h1>Please sign in to view your dashboard</h1>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }

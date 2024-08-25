@@ -61,7 +61,7 @@ const Page = async () => {
               <h2 className="text-2xl font-semibold text-indigo-700 mb-2">
                 Balance Overview
               </h2>
-              <BalanceCard amount={4500} locked={balance.locked} />
+              <BalanceCard amount={balance.amount} locked={balance.locked} />
             </div>
 
             <div className="bg-white rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl">

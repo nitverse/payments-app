@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { FC } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { FC } from "react";
 import { motion } from "framer-motion";
 
 interface SidebarItemProps {
