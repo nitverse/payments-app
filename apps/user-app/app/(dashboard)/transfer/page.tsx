@@ -5,6 +5,8 @@ import { authOptions } from "../../../lib/auth";
 import AddMoneyCard from "../../../components/AddMoneyCard";
 import { BalanceCard } from "../../../components/BalanceCard";
 import { OnRampTransactions } from "../../../components/OnRampTransactions";
+import { CreditCard, ArrowUpRight, Clock } from "lucide-react";
+import Link from "next/link";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -40,35 +42,67 @@ const Page = async () => {
   const transactions = await getOnRampTransactions();
 
   return (
-    <div className="min-h-screen w-screen overflow-hidden bg-gradient-to-br from-purple-100 to-indigo-200 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-6 sm:p-10">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-5xl font-extrabold text-indigo-800 mb-6 text-center tracking-tight">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-indigo-900 mb-10 text-center">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
             Transfer Money
           </span>
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl">
-            <h2 className="text-2xl font-semibold text-indigo-700 mb-4">
-              Add Money
-            </h2>
-            <AddMoneyCard name={session?.user?.name || "user"} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white rounded-3xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
+              <div className="flex items-center mb-4">
+                <CreditCard className="text-indigo-600 mr-3" size={28} />
+                <h2 className="text-3xl font-semibold text-indigo-800">
+                  Add Money
+                </h2>
+              </div>
+              <AddMoneyCard name={session?.user?.name || "user"} />
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Clock className="text-indigo-600 mr-3" size={28} />
+                  <h2 className="text-3xl font-semibold text-indigo-800">
+                    Recent Transactions
+                  </h2>
+                </div>
+                <Link
+                  href="/transactions"
+                  className="flex items-center underline gap-2 text-indigo-600 hover:text-indigo-800 text-lg font-semibold transition-colors duration-200"
+                >
+                  View All Transactions
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </div>
+              <OnRampTransactions transactions={transactions} />
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="bg-white rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl">
-              <h2 className="text-2xl font-semibold text-indigo-700 mb-2">
-                Balance Overview
-              </h2>
+          <div className="space-y-8">
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl text-white">
+              <div className="flex items-center mb-4">
+                <ArrowUpRight className="mr-3" size={28} />
+                <h2 className="text-3xl font-semibold">Balance Overview</h2>
+              </div>
               <BalanceCard amount={balance.amount} locked={balance.locked} />
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl">
-              <h2 className="text-2xl font-semibold text-indigo-700 mb-4">
-                Recent Transactions
+            <div className="bg-white rounded-3xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl">
+              <h2 className="text-2xl font-semibold text-indigo-800 mb-4">
+                Quick Actions
               </h2>
-              <OnRampTransactions transactions={transactions} />
+              <div className="space-y-4">
+                <button className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors duration-200">
+                  Send Money
+                </button>
+                <button className="w-full bg-purple-600 text-white py-3 rounded-xl font-semibold hover:bg-purple-700 transition-colors duration-200">
+                  Request Payment
+                </button>
+              </div>
             </div>
           </div>
         </div>

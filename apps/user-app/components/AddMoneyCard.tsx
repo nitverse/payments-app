@@ -1,11 +1,10 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
-import { Card } from "@repo/ui/card";
 import React, { useState } from "react";
 import { TextInput } from "./TextInput";
 import { Select } from "@repo/ui/Select";
 import { useRouter } from "next/navigation";
+import createOnRampTransaction from "../lib/actions/createOnRampTransaction";
 
 const SUPPORTED_BANKS: { name: string; redirectUrl: string }[] = [
   {
@@ -23,17 +22,25 @@ interface AddMoneyCardProps {
 }
 
 const AddMoneyCard = ({ name }: AddMoneyCardProps) => {
-  const [redirectUrl, setRedirectUrl] = useState<string | undefined>(
-    SUPPORTED_BANKS[0]?.redirectUrl
-  );
+  const [redirectUrl, setRedirectUrl] = useState<string | undefined>( SUPPORTED_BANKS[0]?.redirectUrl);
+  const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
+  const [value, setValue] = useState(0);
 
   const router = useRouter();
-  const onClick = () => {
+
+  const onClick = async () => {
     if (redirectUrl) {
+      console.log(value);
+      await createOnRampTransaction(provider,value);
       router.push(redirectUrl);
     } else {
       console.error("Redirect URL is undefined");
     }
+  };
+
+  const handleAmountChange = (val: string) => {
+    const numericValue = parseFloat(val);
+    setValue(isNaN(numericValue) ? 0 : numericValue);
   };
 
   return (
@@ -41,7 +48,10 @@ const AddMoneyCard = ({ name }: AddMoneyCardProps) => {
       <TextInput
         label="Amount"
         placeholder="Enter amount"
-        onChange={() => {}}
+        onChange={handleAmountChange}
+        type="number"
+        step="0.01"
+        min="0"
       />
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -52,6 +62,7 @@ const AddMoneyCard = ({ name }: AddMoneyCardProps) => {
             setRedirectUrl(
               SUPPORTED_BANKS.find((x) => x.name === value)?.redirectUrl || ""
             );
+            setProvider(value);
           }}
           options={SUPPORTED_BANKS.map((x) => ({
             key: x.name,

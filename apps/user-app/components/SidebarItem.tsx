@@ -21,7 +21,7 @@ const SidebarItem: FC<SidebarItemProps> = ({ href, title, icon }) => {
 
   return (
     <motion.div
-      className={`flex items-center m-4 cursor-pointer p-3 rounded-lg transition-colors duration-200 ease-in-out ${
+      className={`flex items-center cursor-pointer p-3 mx-2 my-1 rounded-lg transition-colors duration-200 ease-in-out ${
         isSelected
           ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
           : "hover:bg-gray-100 text-gray-600"

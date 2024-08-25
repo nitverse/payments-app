@@ -9,7 +9,7 @@ export const BalanceCard = ({
   locked: number;
 }) => {
   return (
-    <Card title="Balance Overview">
+    <Card title="">
       <div className="">
         <div className="flex justify-between items-center py-3">
           <span className="text-sm font-semibold text-green-600">
