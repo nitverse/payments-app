@@ -34,6 +34,7 @@ export default async function createOnRampTransaction(
         startTime: new Date(),
         token: token,
         amount: amount,
+        type: "Credit",
         user: {
           connect: {
             id: session.user.id,
