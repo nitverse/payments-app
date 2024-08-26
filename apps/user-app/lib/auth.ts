@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { db } from "@repo/db";
 
 export const authOptions = {
@@ -43,10 +43,21 @@ export const authOptions = {
             data: {
               number: credentials.phone,
               password: hashedPassword,
+              Balance: {
+                create: {
+                  amount: 0,
+                  locked: 0,
+                },
+              },
+            },
+            include: {
+              Balance: true,
             },
           });
 
-          console.log("New user created : " + user.number);
+          console.log("New user created: " + user.number);
+          console.log("Balance created for user: " + user?.Balance[0]?.id);
+
           return {
             id: user.id.toString(),
             name: user.name,
@@ -54,7 +65,9 @@ export const authOptions = {
           };
         } catch (e) {
           console.error(e);
+          return null;
         }
+
 
         return null;
       },

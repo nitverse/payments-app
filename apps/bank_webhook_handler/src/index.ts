@@ -28,24 +28,29 @@ app.post("/hdfcwebhook", async (req, res) => {
       }),
     ]);
 
-    db.balance.updateMany({
+   await db.balance.updateMany({
       where: {
         userId: paymentInformation.userId,
       },
       data: {
         amount: {
-          increment: Number(paymentInformation.amount) * 100,
+          increment: Number(paymentInformation.amount),
         },
       },
     });
 
+    const updatedBal = await db.balance.findFirst({
+        where: {userId: paymentInformation.userId}
+    })
+    
     console.log(
-      `Balance updated for user ${paymentInformation.userId} with amount ${paymentInformation.amount}`
+      `Balance updated for user ${paymentInformation.userId} with amount ${updatedBal?.amount}`
     );
 
     res.status(200).json({
-      message: "Captured",
+      message: "Balance updated for user: " + paymentInformation.userId,
     });
+    
   } catch (e) {
     console.error(e);
     res.status(411).json({

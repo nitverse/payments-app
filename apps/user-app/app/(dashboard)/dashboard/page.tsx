@@ -24,11 +24,6 @@ export default function DashboardPage() {
 
   return (
     <div className="">
-      <Appbar
-        user={session?.user}
-        onSignin={handleSignIn}
-        onSignout={handleSignOut}
-      />
       <div className="p-4">
         {session ? (
           <div>
