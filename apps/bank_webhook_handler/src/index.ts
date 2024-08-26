@@ -43,9 +43,9 @@ app.post("/hdfcwebhook", async (req, res) => {
         where: {userId: paymentInformation.userId}
     })
     
-    console.log(
-      `Balance updated for user ${paymentInformation.userId} with amount ${updatedBal?.amount}`
-    );
+    // console.log(
+    //   `Balance updated for user ${paymentInformation.userId} with amount ${updatedBal?.amount}`
+    // );
 
     res.status(200).json({
       message: "Balance updated for user: " + paymentInformation.userId,
