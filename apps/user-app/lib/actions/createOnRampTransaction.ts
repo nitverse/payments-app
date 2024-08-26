@@ -1,6 +1,6 @@
 "use server";
 
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth";
 import { db } from "@repo/db";
 import crypto from "crypto";
@@ -34,6 +34,7 @@ export default async function createOnRampTransaction(
         startTime: new Date(),
         token: token,
         amount: amount,
+        type: "Credit",
         user: {
           connect: {
             id: session.user.id,
@@ -66,9 +67,6 @@ export default async function createOnRampTransaction(
     };
   } catch (error) {
     console.error("Error processing transaction:", error);
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data);
-    }
     return {
       success: false,
       message: "An error occurred while processing the transaction",

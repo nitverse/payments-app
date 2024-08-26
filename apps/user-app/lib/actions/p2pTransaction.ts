@@ -1,6 +1,6 @@
 "use server";
 
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth";
 import { db } from "@repo/db";
 
@@ -32,7 +32,7 @@ export async function p2pTransfer(to: string, amount: number) {
   }
 
   try {
-    await db.$transaction(async (tx) => {
+    await db.$transaction(async (tx:any) => {
       await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${from} FOR UPDATE`;
 
       const fromBalance = await tx.balance.findUnique({
