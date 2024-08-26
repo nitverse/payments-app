@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
@@ -27,13 +27,12 @@ export async function p2pTransfer(to: string, amount: number) {
 
   if (from === toUser.id) {
     return {
-      message: "same UserId => Transaction declined"
-    }
+      message: "same UserId => Transaction declined",
+    };
   }
 
   try {
     await db.$transaction(async (tx) => {
-
       await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${from} FOR UPDATE`;
 
       const fromBalance = await tx.balance.findUnique({
@@ -45,7 +44,7 @@ export async function p2pTransfer(to: string, amount: number) {
       }
 
       await new Promise((r) => setTimeout(r, 4000));
-      
+
       await tx.balance.update({
         where: { userId: from },
         data: { amount: { decrement: amount } },
@@ -56,14 +55,36 @@ export async function p2pTransfer(to: string, amount: number) {
         data: { amount: { increment: amount } },
       });
 
+      await tx.p2pTransfers.create({
+        data: {
+          fromUserId: from,
+          toUserId: toUser.id,
+          amount,
+          timestamp: new Date(),
+        },
+      });
+
       await tx.onRampTransaction.create({
         data: {
           status: "Success",
-          token: `P2P-${Date.now()}`,
+          token: `ToP2P-${Date.now()}`,
           provider: "P2P Transfer " + session?.user?.name,
           amount: amount,
           startTime: new Date(),
           userId: toUser.id,
+          type: "Credit",
+        },
+      });
+
+      await tx.onRampTransaction.create({
+        data: {
+          status: "Success",
+          token: `FromP2P-${Date.now()}`,
+          provider: "P2P Transfer " + toUser.name,
+          amount: amount,
+          startTime: new Date(),
+          userId: from,
+          type: "Debit",
         },
       });
       return {

@@ -8,13 +8,25 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String? @unique
-  name     String?
-  number   String  @unique
-  password String
+  id                String              @id @default(uuid())
+  email             String?             @unique
+  name              String?
+  number            String              @unique
+  password          String
   OnRampTransaction OnRampTransaction[]
-  Balance  Balance[]
+  Balance           Balance[]
+  sentTransfers     p2pTransfers[]      @relation(name: "FromUserRelation")
+  recievedTransfers p2pTransfers[]      @relation(name: "ToUserRelation")
+}
+
+model p2pTransfers {
+  id         String   @id @default(uuid())
+  amount     Int
+  timestamp  DateTime
+  fromUserId String
+  fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
+  toUserId   String
+  toUser     User     @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
 }
 
 model Merchant {
@@ -24,23 +36,24 @@ model Merchant {
   auth_type AuthType
 }
 
-model OnRampTransaction{
-  id        String   @id @default(uuid())
+model OnRampTransaction {
+  id        String       @id @default(uuid())
   status    OnRampStatus
-  token     String   @unique
+  token     String       @unique
   provider  String
   amount    Int
+  type      TransactionType
   startTime DateTime
   userId    String
-  user      User     @relation(fields: [userId] , references: [id])
+  user      User         @relation(fields: [userId], references: [id])
 }
 
-model Balance{
-  id        String   @id @default(uuid())
-  userId    String    @unique
-  amount    Int
-  locked    Int
-  user      User   @relation(fields: [userId] , references: [id])
+model Balance {
+  id     String @id @default(uuid())
+  userId String @unique
+  amount Int
+  locked Int
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 enum AuthType {
@@ -52,4 +65,9 @@ enum OnRampStatus {
   Success
   Failure
   Processing
+}
+
+enum TransactionType {
+  Credit
+  Debit
 }

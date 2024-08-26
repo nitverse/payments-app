@@ -9,6 +9,7 @@ interface Transaction {
   amount: number;
   status: string;
   provider: string;
+  type: "Credit" | "Debit";
 }
 
 interface TransactionsListProps {
@@ -18,10 +19,9 @@ interface TransactionsListProps {
 const TransactionsList: React.FC<TransactionsListProps> = ({
   transactions,
 }) => {
-
-   const sortedTransactions = [...transactions].sort(
-     (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
-   );
+  const sortedTransactions = [...transactions].sort(
+    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+  );
 
   return (
     <motion.div
@@ -41,28 +41,35 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div
+                    className={`w-10 h-10 ${t.type === "Credit" ? "bg-green-100" : "bg-red-100"} rounded-full flex items-center justify-center`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
                       height="16"
                       fill="currentColor"
-                      className="text-blue-700 h-6 w-6"
+                      className={`${t.type === "Credit" ? "text-green-700" : "text-red-700"} h-6 w-6`}
                       viewBox="0 0 16 16"
                     >
                       <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4z" />
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-700">{t.provider}</p>
+                    <p className="font-semibold text-gray-700">
+                      {t.type === "Credit" ? "Received from" : "Sent to"}{" "}
+                      {t.provider}
+                    </p>
                     <p className="text-sm text-gray-500">
                       {new Date(t.time).toLocaleString()}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-2xl text-gray-900">
-                    ₹{t.amount.toFixed(2)}
+                  <p
+                    className={`font-semibold text-2xl ${t.type === "Credit" ? "text-green-600" : "text-red-600"}`}
+                  >
+                    {t.type === "Credit" ? "+" : "-"} ₹{t.amount.toFixed(2)}
                   </p>
                   <p
                     className={`text-sm px-2 py-1 rounded-full inline-block mt-1 ${

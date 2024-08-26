@@ -9,6 +9,7 @@ export const OnRampTransactions = ({
     amount: number;
     status: string;
     provider: string;
+    type: "Credit" | "Debit";
   }[];
 }) => {
   if (!transactions.length) {
@@ -38,7 +39,7 @@ export const OnRampTransactions = ({
               <div className="flex-1 mb-2 sm:mb-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm font-medium text-gray-800">
-                    Received INR
+                    {t.type === "Credit" ? "Received" : "Sent"} INR
                   </span>
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
@@ -66,8 +67,12 @@ export const OnRampTransactions = ({
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm px-4 font-semibold text-green-600">
-                  + ₹{t.amount}
+                <div
+                  className={`text-sm px-4 font-semibold ${
+                    t.type === "Credit" ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {t.type === "Credit" ? "+" : "-"} ₹{t.amount}
                 </div>
               </div>
             </div>
